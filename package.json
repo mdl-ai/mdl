@@ -3,7 +3,7 @@
     "displayName": "mdl",
     "publisher": "jackos",
     "version": "0.0.5",
-    "description": "Generate and execute code blocks in Markdown documents from language models",
+    "description": "Generate code blocks from AI models, execute and save results to markdown",
     "main": "./dist/extension.js",
     "icon": "mdl.png",
     "keywords": [
@@ -74,19 +74,11 @@
             {
                 "id": "chatgpt",
                 "aliases": [
-                    "chatgpt",
-                    "ChatGPT"
+                    "ChatGPT",
+                    "chatgpt"
                 ],
                 "extensions": [],
-                "firstLine": "^#!.*\\b(chatgpt)\\b",
-                "configuration": "./chatgpt.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "chatgpt",
-                "scopeName": "source.shell.chatgpt",
-                "path": "./chatgpt-syntax.json"
+                "firstLine": "^#!.*\\b(chatgpt)\\b"
             }
         ],
         "notebooks": [
