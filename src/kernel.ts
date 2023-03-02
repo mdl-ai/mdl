@@ -8,7 +8,7 @@ import { ChildProcessWithoutNullStreams, spawn, spawnSync } from 'child_process'
 import { processShell as processShell } from './languages/shell';
 import fetch from 'node-fetch';
 import * as vscode from 'vscode';
-import { Configuration, OpenAIApi } from "openai";
+// import { Configuration, OpenAIApi } from "openai";
 import { processCellsPython } from './languages/python';
 const { promisify } = require('util');
 const sleep = promisify(setTimeout);
@@ -96,7 +96,7 @@ export class Kernel {
                 'Authorization': 'Bearer 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',
                 'OpenAI-Organization': 'org-w6zOoRsL3BhbJOc8Yi3GLozs',
             };
-            const messages: ChatMessage[] = [{ role: "system", content: "You are an assistant writing Rust code" }];
+            const messages: ChatMessage[] = [{ role: "system", content: "You are ChatGPT, an assistant helping to write code" }];
             for (const message of cellsStripped) {
                 messages.push({ role: "user", content: message.contents });
             }
@@ -114,17 +114,20 @@ export class Kernel {
                 .catch((error) => console.error(error)) as ChatResponse;
 
             for (const choice of result.choices) {
-                await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelow');
-                await sleep(200);
-                let editor = vscode.window.activeTextEditor as vscode.TextEditor;
-                await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), choice.message.content)));
+                // await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelow');
+                // await sleep(200);
+                // let editor = vscode.window.activeTextEditor as vscode.TextEditor;
+                // await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), choice.message.content)));
+                const x = new NotebookCellOutputItem(encoder.encode(choice.message.content), "jackos.mdl/chatgpt");
+                exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
+                exec.end(false, (new Date).getTime());
             }
 
             exec.end(true, (new Date).getTime());
         } else {
             const runProgram = new Promise((resolve, _) => {
                 let output: ChildProcessWithoutNullStreams;
-                const mimeType = `text/plain`;
+                const mimeType = `jackos.mdl/chatgpt`;
                 switch (lang) {
                     case "rust":
                         lastRunLanguage = "rust";
@@ -146,7 +149,7 @@ export class Kernel {
                         let esr = spawnSync("esr");
                         if (esr.stdout === null) {
                             let response = encoder.encode("To make TypeScript run fast install esr globally:\nnpm install -g esbuild-runner");
-                            const x = new NotebookCellOutputItem(response, "text/plain");
+                            const x = new NotebookCellOutputItem(response, "jackos.mdl/chatgpt");
                             exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
                             exec.end(false, (new Date).getTime());
                             return;
@@ -172,7 +175,7 @@ export class Kernel {
                         break;
                     default:
                         let response = encoder.encode("Language hasn't been implemented yet");
-                        const x = new NotebookCellOutputItem(response, "text/plain");
+                        const x = new NotebookCellOutputItem(response, "jackos.mdl/chatgpt");
                         exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
                         exec.end(false, (new Date).getTime());
                         return;

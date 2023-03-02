@@ -103,7 +103,7 @@ export function parseMarkdown(content: string): RawNotebookCell[] {
             .join('\n');
         const trailingWhitespace = parseWhitespaceLines(false);
         if (lang === "output") {
-            cells[cells.length - 1].outputs = [{ items: [{ data: textEncoder.encode(content), mime: "text/plain" }] }];
+            cells[cells.length - 1].outputs = [{ items: [{ data: textEncoder.encode(content), mime: "jackos.mdl/chatgpt" }] }];
         } else {
             cells.push({
                 language,

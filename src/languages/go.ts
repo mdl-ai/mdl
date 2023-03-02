@@ -102,18 +102,18 @@ export let fixImportsGo = (exec: NotebookCellExecution, cell: NotebookCell): Pro
         let tidy = spawn('go', ['mod', 'tidy'], { cwd: path.join(tempDir, "go") });
         tidy.stderr.on("data", (tidyData: Uint8Array) => {
             console.log("data", tidyData);
-            const x = new NotebookCellOutputItem(tidyData, "text/plain");
+            const x = new NotebookCellOutputItem(tidyData, "jackos.mdl/chatgpt");
             exec.appendOutput([new NotebookCellOutput([x])], cell);
         });
         tidy.stdout.on("data", (tidyData: Uint8Array) => {
             console.log("data", tidyData);
-            const x = new NotebookCellOutputItem(tidyData, "text/plain");
+            const x = new NotebookCellOutputItem(tidyData, "jackos.mdl/chatgpt");
             exec.appendOutput([new NotebookCellOutput([x])], cell);
         });
         tidy.on("close", async (_) => {
             exec.clearOutput(cell);
             let finished = encoder.encode("Go has finished tidying modules, rerun cells now...");
-            const x = new NotebookCellOutputItem(finished, "text/plain");
+            const x = new NotebookCellOutputItem(finished, "jackos.mdl/chatgpt");
             exec.appendOutput([new NotebookCellOutput([x])], cell);
             exec.end(false, (new Date).getTime());
             resolve(0);
