@@ -134,10 +134,11 @@ export const processCellsRust = (cells: Cell[]): ChildProcessWithoutNullStreams 
         cargo = '[package]\nname = "output"\nversion = "0.0.1"\nedition="2021"\n[dependencies]\n' + crates;
     }
 
+    console.log(`main file: ${tempDir}/rust/src/main.rs`);
     mkdirSync(`${tempDir}/rust/src`, { recursive: true });
     writeFileSync(`${tempDir}/rust/src/macros.rs`, macros);
     writeFileSync(`${tempDir}/rust/src/main.rs`, main);
     writeFileSync(`${tempDir}/rust/src/main-formatted.rs`, mainFormatted);
     writeFileSync(`${tempDir}/rust/Cargo.toml`, cargo);
-    return spawn('cargo', ['run', '--all-features', '--manifest-path', `${tempDir} /rust/Cargo.toml`]);
+    return spawn('cargo', ['run', '--all-features', '--manifest-path', `${tempDir}/rust/Cargo.toml`]);
 };

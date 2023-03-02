@@ -133,6 +133,7 @@
         "webpack-cli": "^5.0.1"
     },
     "dependencies": {
-        "node-fetch": "^3.3.0"
+        "node-fetch": "^3.3.0",
+        "openai": "^3.1.0"
     }
 }
