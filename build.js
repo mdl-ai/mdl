@@ -3,7 +3,7 @@ const watch = process.argv[2] === "--watch";
 
 require("esbuild")
   .build({
-    entryPoints: ["src/extension.ts"],
+    entryPoints: ["src/extension.ts", "src/chatgpt.ts"],
     bundle: true,
     outdir: "./dist",
     external: ["vscode"],
@@ -12,12 +12,12 @@ require("esbuild")
     minify: production,
     target: ["ES2021"],
     platform: "node",
-    watch: watch && {
-      onRebuild(error) {
-        if (error) { console.error("watch build failed:", error); }
-        else { console.log("build successful"); }
-      },
-    },
+    // watch: watch && {
+    //   onRebuild(error) {
+    //     if (error) { console.error("watch build failed:", error); }
+    //     else { console.log("build successful"); }
+    //   },
+    // },
   })
   .catch((e) => {
     console.error(e);

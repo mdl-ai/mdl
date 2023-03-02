@@ -7,7 +7,6 @@ import {
 } from 'vscode';
 import { openMain } from './commands/openMain';
 
-
 const kernel = new Kernel();
 export async function activate(context: ExtensionContext) {
     const controller = notebooks.createNotebookController('mdl', 'mdl', 'mdl');

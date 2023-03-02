@@ -6,7 +6,6 @@ import { processCellsJavascript } from "./languages/javascript";
 import { processCellsTypescript } from "./languages/typescript";
 import { ChildProcessWithoutNullStreams, spawn, spawnSync } from 'child_process';
 import { processShell as processShell } from './languages/shell';
-import fetch from 'node-fetch';
 import * as vscode from 'vscode';
 // import { Configuration, OpenAIApi } from "openai";
 import { processCellsPython } from './languages/python';
