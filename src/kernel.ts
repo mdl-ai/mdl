@@ -4,14 +4,13 @@ import { processCellsRust } from "./languages/rust";
 import { fixImportsGo, processCellsGo } from "./languages/go";
 import { processCellsJavascript } from "./languages/javascript";
 import { processCellsTypescript } from "./languages/typescript";
-import { ChildProcessWithoutNullStreams, spawn, spawnSync } from 'child_process';
+import { ChildProcessWithoutNullStreams, spawnSync } from 'child_process';
 import { processShell as processShell } from './languages/shell';
-import * as vscode from 'vscode';
 import fetch from 'node-fetch';
-// import { Configuration, OpenAIApi } from "openai";
 import { processCellsPython } from './languages/python';
 const { promisify } = require('util');
 const sleep = promisify(setTimeout);
+import * as vscode from 'vscode';
 
 
 export interface Cell {
@@ -113,16 +112,31 @@ export class Kernel {
                 .then((data) => data)
                 .catch((error) => console.error(error)) as ChatResponse;
 
-            for (const choice of result.choices) {
-                // await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelow');
-                // await sleep(200);
-                // let editor = vscode.window.activeTextEditor as vscode.TextEditor;
-                // await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), choice.message.content)));
-                const x = new NotebookCellOutputItem(encoder.encode(choice.message.content), "jackos.mdl/chatgpt");
-                exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
-                exec.end(false, (new Date).getTime());
-            }
+            let text = result.choices[0].message.content;
+            let code_blocks = text.split("```");
 
+
+            let language = "";
+            for (let block of code_blocks) {
+                if (block.startsWith("python")) {
+                    language = "python";
+                    block = block.substring(6);
+                    await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelowAndFocusContainer');
+                    await sleep(2000);
+                    // await vscode.commands.executeCommand('notebook.cell.changeLanguage', language);
+                    let editor = vscode.window.activeTextEditor as vscode.TextEditor;
+                    let blockTrimmed = block.trim().replace("\n\n", "");
+                    await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), blockTrimmed)));
+                }
+                else {
+                    await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelowAndFocusContainer');
+                    await sleep(2000);
+                    // await vscode.commands.executeCommand('notebook.cell.changeLanguage', "markdown");
+                    let blockTrimmed = block.trim().replace("\n\n", "");
+                    let editor = vscode.window.activeTextEditor as vscode.TextEditor;
+                    await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), blockTrimmed)));
+                }
+            }
             exec.end(true, (new Date).getTime());
         } else {
             const runProgram = new Promise((resolve, _) => {

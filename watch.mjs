@@ -5,10 +5,11 @@ let ctx1 = await esbuild.context({
     bundle: true,
     outdir: "./dist",
     format: "esm",
-    sourcemap: !production,
-    minify: production,
+    sourcemap: true,
+    minify: false,
     platform: "node",
     target: ["ES2021"],
+    external: ["vscode"],
   })
   .catch((e) => {
     console.error(e);
@@ -18,13 +19,14 @@ let ctx1 = await esbuild.context({
 
 let ctx2 = await esbuild.context({
     entryPoints: ["src/extension.ts"],
-    bundle: false,
+    bundle: true,
     outdir: "./dist",
     format: "cjs",
     sourcemap: true,
     minify: false,
-    target: ["ES2021"],
     platform: "node",
+    target: ["ES2021"],
+    external: ["vscode"],
   })
   .catch((e) => {
     console.error(e);
