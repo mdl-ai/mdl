@@ -7,6 +7,7 @@ import { processCellsTypescript } from "./languages/typescript";
 import { ChildProcessWithoutNullStreams, spawn, spawnSync } from 'child_process';
 import { processShell as processShell } from './languages/shell';
 import * as vscode from 'vscode';
+import fetch from 'node-fetch';
 // import { Configuration, OpenAIApi } from "openai";
 import { processCellsPython } from './languages/python';
 const { promisify } = require('util');

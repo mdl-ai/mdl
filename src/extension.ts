@@ -10,7 +10,6 @@ import { openMain } from './commands/openMain';
 const kernel = new Kernel();
 export async function activate(context: ExtensionContext) {
     const controller = notebooks.createNotebookController('mdl', 'mdl', 'mdl');
-
     controller.supportedLanguages = ['rust', 'go', 'javascript', 'typescript', 'shellscript', 'fish', 'bash', 'nushell', 'json', 'plaintext', 'chatgpt', 'python'];
     controller.executeHandler = (cells, doc, ctrl) => {
         if (cells.length > 1) {

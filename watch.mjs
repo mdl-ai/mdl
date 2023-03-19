@@ -2,13 +2,13 @@ import * as esbuild from 'esbuild';
 
 let ctx1 = await esbuild.context({
     entryPoints: ["src/chatgpt.ts"],
-    bundle: false,
+    bundle: true,
     outdir: "./dist",
     format: "esm",
-    sourcemap: true,
-    minify: false,
-    // target: ["ES2020"],
+    sourcemap: !production,
+    minify: production,
     platform: "node",
+    target: ["ES2021"],
   })
   .catch((e) => {
     console.error(e);
@@ -18,13 +18,12 @@ let ctx1 = await esbuild.context({
 
 let ctx2 = await esbuild.context({
     entryPoints: ["src/extension.ts"],
-    bundle: true,
+    bundle: false,
     outdir: "./dist",
-    external: ["vscode"],
     format: "cjs",
     sourcemap: true,
     minify: false,
-    // target: ["ES2020"],
+    target: ["ES2021"],
     platform: "node",
   })
   .catch((e) => {

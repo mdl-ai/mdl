@@ -3,13 +3,13 @@ const production = process.argv[2] === "--production";
 
 await esbuild.build({
     entryPoints: ["src/chatgpt.ts"],
-    bundle: false,
+    bundle: true,
     outdir: "./dist",
     format: "esm",
     sourcemap: !production,
     minify: production,
-    // target: ["ES2020"],
     platform: "node",
+    // target: ["ES2021"],
   })
   .catch((e) => {
     console.error(e);
@@ -25,8 +25,8 @@ await esbuild.build({
     format: "cjs",
     sourcemap: !production,
     minify: production,
-    // target: ["ES2020"],
     platform: "node",
+    // target: ["ES2021"],
   })
   .catch((e) => {
     console.error(e);
