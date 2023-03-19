@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/chatgpt.ts"],
-  "sourcesContent": ["import type { ActivationFunction } from 'vscode-notebook-renderer';\n\nexport const activate: ActivationFunction = context => ({\n    renderOutputItem(data, element) {\n        element.innerText = data.text();\n    }\n});\n"],
-  "mappings": "AAEO,MAAM,WAA+B,cAAY;AAAA,EACpD,iBAAiB,MAAM,SAAS;AAC5B,YAAQ,YAAY,KAAK,KAAK;AAAA,EAClC;AACJ;",
-  "names": []
-}

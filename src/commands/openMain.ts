@@ -15,8 +15,8 @@ export const openMain = async () => {
             return;
         case "rust":
             main = path.join(dir, 'src', 'main.rs');
-            let main_formatted = path.join(dir, 'src', 'main-formatted.rs')
-            rename(main_formatted, main, () => { console.log("moved file") });
+            let mainFormatted = path.join(dir, 'src', 'main-formatted.rs');
+            rename(mainFormatted, main, () => { console.log("moved file"); });
             spawnSync('cargo', ['fmt', '--manifest-path', `${tempDir}/rust/Cargo.toml`]);
             break;
         case "go":

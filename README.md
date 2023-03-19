@@ -1,4 +1,4 @@
-# mdl 
+# MDL 
 ## Quick Start
 - Open or create a `.md` document
 - Right-click the filename and select `Open With` or `Reopen Editor With...`

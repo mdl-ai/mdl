@@ -1,13 +1,12 @@
 import * as esbuild from 'esbuild';
-const production = process.argv[2] === "--production";
 
-await esbuild.build({
+let ctx1 = await esbuild.context({
     entryPoints: ["src/chatgpt.ts"],
     bundle: false,
     outdir: "./dist",
     format: "esm",
-    sourcemap: !production,
-    minify: production,
+    sourcemap: true,
+    minify: false,
     // target: ["ES2020"],
     platform: "node",
   })
@@ -17,14 +16,14 @@ await esbuild.build({
   });
 
 
-await esbuild.build({
+let ctx2 = await esbuild.context({
     entryPoints: ["src/extension.ts"],
     bundle: true,
     outdir: "./dist",
     external: ["vscode"],
     format: "cjs",
-    sourcemap: !production,
-    minify: production,
+    sourcemap: true,
+    minify: false,
     // target: ["ES2020"],
     platform: "node",
   })
@@ -32,3 +31,7 @@ await esbuild.build({
     console.error(e);
     process.exit(1);
   });
+
+  await ctx1.watch();
+  await ctx2.watch();
+  console.log("watching for changes...");

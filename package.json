@@ -58,6 +58,11 @@
                 "command": "mdl.openMain",
                 "title": "mdl: Open generated code",
                 "description": "Opens the code being generated in a side tab"
+            },
+            {
+                "command": "mdl.kernel.restart",
+                "title": "mdl: Restart kernel",
+                "description": "Doesn't do anything just for testing stuff"
             }
         ],
         "keybindings": [
@@ -111,28 +116,22 @@
         "lint": "eslint src --ext ts",
         "test": "node ./out/test/runTest.js",
         "compile": "node ./build.mjs",
-        "watch": "node ./build.mjs --watch",
-        "vscode:prepublish": "node ./build.js --production"
+        "watch": "node ./watch.mjs",
+        "vscode:prepublish": "node ./build.mjs"
     },
     "devDependencies": {
-        "@types/glob": "^8.0.1",
+        "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.1",
         "@types/node": "18.x",
-        "@types/vscode": "^1.75.0",
+        "@types/vscode": "^1.76.0",
         "@types/vscode-notebook-renderer": "^1.72.0",
-        "@typescript-eslint/eslint-plugin": "^5.49.0",
-        "@typescript-eslint/parser": "^5.49.0",
-        "@vscode/test-electron": "^2.2.2",
-        "esbuild": "^0.17.10",
-        "eslint": "^8.33.0",
-        "glob": "^8.1.0",
-        "mocha": "^10.1.0",
-        "ts-loader": "^9.4.2",
-        "typescript": "^4.9.4"
-    },
-    "dependencies": {
-        "preact": "^10.13.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "@typescript-eslint/eslint-plugin": "^5.55.0",
+        "@typescript-eslint/parser": "^5.55.0",
+        "@vscode/test-electron": "^2.3.0",
+        "esbuild": "^0.17.12",
+        "eslint": "^8.36.0",
+        "glob": "^9.3.0",
+        "mocha": "^10.2.0",
+        "typescript": "^5.0.2"
     }
 }
