@@ -10,8 +10,8 @@
         "notebook",
         "notebooks",
         "ai",
-        "machine",
-        "learning"
+        "machine learning",
+        "deep learning"
     ],
     "activationEvents": [
         "onNotebook:mdl",
@@ -43,6 +43,16 @@
                 },
                 "mdl.baseFile": {
                     "description": "The index file that will be opened when searching",
+                    "type": "string",
+                    "scope": "window"
+                },
+                "mdl.openAIKey": {
+                    "description": "Your personal key used to access the OpenAI API, you can create one here: https://platform.openai.com/account/api-keys",
+                    "type": "string",
+                    "scope": "window"
+                },
+                "mdl.openAIOrganizationID": {
+                    "description": "Your OpenAI Organization ID, you can find it here: https://platform.openai.com/account/org-settings",
                     "type": "string",
                     "scope": "window"
                 }

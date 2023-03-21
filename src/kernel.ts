@@ -11,6 +11,7 @@ import { processCellsPython } from './languages/python';
 const { promisify } = require('util');
 const sleep = promisify(setTimeout);
 import * as vscode from 'vscode';
+import { getOpenAIAPIKey, getOpenAIOrganizationID } from './config';
 
 
 export interface Cell {
@@ -92,8 +93,8 @@ export class Kernel {
             const url = 'https://api.openai.com/v1/chat/completions';
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer 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',
-                'OpenAI-Organization': 'org-w6zOoRsL3BhbJOc8Yi3GLozs',
+                'Authorization': `Bearer ${getOpenAIAPIKey()}`,
+                'OpenAI-Organization': `${getOpenAIOrganizationID()}`,
             };
             const messages: ChatMessage[] = [{ role: "system", content: "You are ChatGPT, an assistant helping to write code" }];
             for (const message of cellsStripped) {

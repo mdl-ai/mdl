@@ -1,27 +1,4 @@
-```chatgpt
-Write a Python function that sums the numbers of an array passed in
-```
 
-Sure! Here's a Python function that sums the numbers of an array (list):
-```python
-def sum_array(arr):
-    """Return the sum of numbers in the array"""
-    sum = 0
-    
-    for n in arr:
-        sum += n
-    
-    return sum
-```
+What would you call a language model like ChatGPT, a general term for it?
 
-Here's an example of how you can use the function:
-```python
-arr = [1, 2, 3, 4, 5]
-total = sum_array(arr)
-print(total) # Output: 15
-```
-```output
-15
-```
-
-This function takes an array (list) as input, and adds up each element in the array to calculate the total sum. The sum is returned as output.
+The general term for a language model like ChatGPT is "AI language model". An AI language model is a type of artificial intelligence that can understand natural language, generate text, and respond to questions or commands given by a human user. It is trained using vast amounts of textual data and uses complex algorithms to understand the nuances of language and generate realistic responses.
