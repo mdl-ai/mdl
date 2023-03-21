@@ -114,43 +114,25 @@ export class Kernel {
 
             let text = result.choices[0].message.content;
             let code_blocks = text.split("```");
-
-
             let language = "";
+            let edits: vscode.NotebookCellData[] = [];
             for (let block of code_blocks) {
                 if (block.startsWith("python")) {
                     language = "python";
                     block = block.substring(6);
-                    // await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelowAndFocusContainer');
-                    // exec.cell.document.languageId = "python";
-                    // await sleep(1000);
-                    // await vscode.commands.executeCommand('notebook.cell.changeLanguage', language);
-                    // let editor = vscode.window.activeTextEditor as vscode.TextEditor;
-                    const edit = new WorkspaceEdit();
-                    // Don't edit the metadata directly, always get a clone (prevents accidental singletons and directly editing the objects).
-                    // const updatedMetadata: CellMetadata = { ...JSON.parse(JSON.stringify(cellMetadata || {})) };
-                    // updatedMetadata.id = id;
                     let blockTrimmed = block.trim().replace("\n\n", "");
-                    let notebook_edit = NotebookEdit.insertCells(0, [new vscode.NotebookCellData(vscode.NotebookCellKind.Code, blockTrimmed, "python")]);
-                    edit.set(cells[0].notebook.uri, [notebook_edit]);
-                    workspace.applyEdit(edit);
-
-                    // await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), blockTrimmed)));
+                    edits.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Code, blockTrimmed, "python"));
                 }
                 else {
                     let blockTrimmed = block.trim().replace("\n\n", "");
-                    const edit = new WorkspaceEdit();
-                    let notebook_edit = NotebookEdit.insertCells(0, [new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, blockTrimmed, "markdown")]);
-                    edit.set(cells[0].notebook.uri, [notebook_edit]);
-                    workspace.applyEdit(edit);
-                    // await vscode.commands.executeCommand('notebook.cell.insertCodeCellBelowAndFocusContainer');
-                    // await sleep(1000);
-                    // await vscode.commands.executeCommand('notebook.cell.changeLanguage');
-                    // let blockTrimmed = block.trim().replace("\n\n", "");
-                    // let editor = vscode.window.activeTextEditor as vscode.TextEditor;
-                    // await editor.edit((editBuilder => editBuilder.insert(new vscode.Position(0, 0), blockTrimmed)));
+                    edits.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, blockTrimmed, "markdown"));
                 }
+
             }
+            const edit = new WorkspaceEdit();
+            let notebook_edit = NotebookEdit.insertCells(cells[0].index + 1, edits);
+            edit.set(cells[0].notebook.uri, [notebook_edit]);
+            workspace.applyEdit(edit);
             exec.end(true, (new Date).getTime());
         } else {
             let output: ChildProcessWithoutNullStreams;
