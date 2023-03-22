@@ -16,6 +16,7 @@ interface ICodeBlockStart {
 }
 
 const LANG_IDS = new Map([
+    ['zig', 'zig'],
     ['js', 'javascript'],
     ['ts', 'typescript'],
     ['rust', 'rust'],
@@ -103,7 +104,7 @@ export function parseMarkdown(content: string): RawNotebookCell[] {
             .join('\n');
         const trailingWhitespace = parseWhitespaceLines(false);
         if (lang === "output") {
-            cells[cells.length - 1].outputs = [{ items: [{ data: textEncoder.encode(content), mime: "jackos.mdl/chatgpt" }] }];
+            cells[cells.length - 1].outputs = [{ items: [{ data: textEncoder.encode(content), mime: "text/plain" }] }];
         } else {
             cells.push({
                 language,

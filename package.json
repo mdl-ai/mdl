@@ -1,7 +1,7 @@
 {
-    "name": "mdl",
+    "name": "mdl-ai",
     "displayName": "mdl",
-    "publisher": "jackos",
+    "publisher": "mdl",
     "version": "0.0.5",
     "description": "Generate code blocks from AI models, execute and save results to markdown",
     "main": "./dist/extension.js",
@@ -46,12 +46,12 @@
                     "type": "string",
                     "scope": "window"
                 },
-                "mdl.openAIKey": {
+                "mdl.openaiKey": {
                     "description": "Your personal key used to access the OpenAI API, you can create one here: https://platform.openai.com/account/api-keys",
                     "type": "string",
                     "scope": "window"
                 },
-                "mdl.openAIOrganizationID": {
+                "mdl.openaiOrganizationID": {
                     "description": "Your OpenAI Organization ID, you can find it here: https://platform.openai.com/account/org-settings",
                     "type": "string",
                     "scope": "window"
@@ -107,16 +107,6 @@
                     }
                 ]
             }
-        ],
-        "notebookRenderer": [
-            {
-                "id": "chatgpt",
-                "displayName": "ChatGPT Renderer",
-                "entrypoint": "./dist/chatgpt.js",
-                "mimeTypes": [
-                    "jackos.mdl/chatgpt"
-                ]
-            }
         ]
     },
     "scripts": {
@@ -127,7 +117,7 @@
         "test": "node ./out/test/runTest.js",
         "compile": "node ./build.mjs",
         "watch": "node ./watch.mjs",
-        "vscode:prepublish": "node ./build.mjs"
+        "vscode:prepublish": "node ./build.mjs --production"
     },
     "devDependencies": {
         "@types/glob": "^8.1.0",

@@ -10,6 +10,6 @@ export const getBasePath = () => configuration().get<string>('basePath') || join
 
 export const getTempPath = () => configuration().get<string>('tempPath') || join(tmpdir(), 'mdl');
 
-export const getOpenAIAPIKey = () => configuration().get<string>('openAIKey') || '';
+export const getOpenAIAPIKey = () => configuration().get<string>('openaiKey') || '';
 
-export const getOpenAIOrganizationID = () => configuration().get<string>('openAIOrganizationID') || '';
+export const getOpenAIOrganizationID = () => configuration().get<string>('openaiOrganizationID') || '';

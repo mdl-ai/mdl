@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { NotebookDocument, NotebookCell, NotebookController, NotebookCellOutput, NotebookCellOutputItem, NotebookRange, NotebookEdit, WorkspaceEdit, workspace } from 'vscode';
+import { NotebookDocument, NotebookCell, NotebookController, NotebookCellOutput, NotebookCellOutputItem, NotebookRange, NotebookEdit, WorkspaceEdit, workspace, NotebookCellData, NotebookCellKind } from 'vscode';
 import { processCellsRust } from "./languages/rust";
 import { fixImportsGo, processCellsGo } from "./languages/go";
 import { processCellsJavascript } from "./languages/javascript";
@@ -8,10 +8,8 @@ import { ChildProcessWithoutNullStreams, spawnSync } from 'child_process';
 import { processShell as processShell } from './languages/shell';
 import fetch from 'node-fetch';
 import { processCellsPython } from './languages/python';
-const { promisify } = require('util');
-const sleep = promisify(setTimeout);
-import * as vscode from 'vscode';
 import { getOpenAIAPIKey, getOpenAIOrganizationID } from './config';
+import { processCellsZig } from './languages/zig';
 
 
 export interface Cell {
@@ -107,26 +105,31 @@ export class Kernel {
 
             let body = JSON.stringify(data);
 
-
-            let result: ChatResponse = await fetch(url, { headers, body, method: 'POST' })
-                .then((response) => response.json())
-                .then((data) => data)
-                .catch((error) => console.error(error)) as ChatResponse;
+            const response = await fetch(url, { headers, body, method: 'POST' });
+            if (response.status !== 200) {
+                let error = await response.text();
+                let t = encoder.encode("Make sure OpenAI API key and organization is set\nOpen settings and search for `openai`\nReceived an error from OpenAI: " + error);
+                const x = new NotebookCellOutputItem(t, "text/plain");
+                exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
+                exec.end(false, (new Date).getTime());
+                return;
+            }
+            const result: ChatResponse = await response.json() as ChatResponse;
 
             let text = result.choices[0].message.content;
             let code_blocks = text.split("```");
             let language = "";
-            let edits: vscode.NotebookCellData[] = [];
+            let edits: NotebookCellData[] = [];
             for (let block of code_blocks) {
                 if (block.startsWith("python")) {
                     language = "python";
                     block = block.substring(6);
                     let blockTrimmed = block.trim().replace("\n\n", "");
-                    edits.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Code, blockTrimmed, "python"));
+                    edits.push(new NotebookCellData(NotebookCellKind.Code, blockTrimmed, "python"));
                 }
                 else {
                     let blockTrimmed = block.trim().replace("\n\n", "");
-                    edits.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, blockTrimmed, "markdown"));
+                    edits.push(new NotebookCellData(NotebookCellKind.Markup, blockTrimmed, "markdown"));
                 }
 
             }
@@ -137,8 +140,12 @@ export class Kernel {
             exec.end(true, (new Date).getTime());
         } else {
             let output: ChildProcessWithoutNullStreams;
-            const mimeType = `jackos.mdl/chatgpt`;
+            const mimeType = `text/plain`;
             switch (lang) {
+                case "zig":
+                    lastRunLanguage = "zig";
+                    output = processCellsZig(cellsStripped);
+                    break;
                 case "rust":
                     lastRunLanguage = "rust";
                     output = processCellsRust(cellsStripped);
@@ -159,7 +166,7 @@ export class Kernel {
                     let esr = spawnSync("esr");
                     if (esr.stdout === null) {
                         let response = encoder.encode("To make TypeScript run fast install esr globally:\nnpm install -g esbuild-runner");
-                        const x = new NotebookCellOutputItem(response, "jackos.mdl/chatgpt");
+                        const x = new NotebookCellOutputItem(response, "text/plain");
                         exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
                         exec.end(false, (new Date).getTime());
                         return;
@@ -185,7 +192,7 @@ export class Kernel {
                     break;
                 default:
                     let response = encoder.encode("Language hasn't been implemented yet");
-                    const x = new NotebookCellOutputItem(response, "jackos.mdl/chatgpt");
+                    const x = new NotebookCellOutputItem(response, "text/plain");
                     exec.appendOutput([new NotebookCellOutput([x])], cells[0]);
                     exec.end(false, (new Date).getTime());
                     return;
